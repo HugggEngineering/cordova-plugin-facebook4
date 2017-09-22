@@ -33,6 +33,14 @@ exports.logPurchase = function logPurchase (value, currency, s, f) {
   exec(s, f, 'FacebookConnectPlugin', 'logPurchase', [value, currency])
 }
 
+exports.logCompletedRegistrationEvent = function logPurchase (name, s, f) {
+  exec(s, f, 'FacebookConnectPlugin', 'logCompletedRegistrationEvent', [name)
+}
+
+exports.logAddedPaymentInfo = function logPurchase (name, s, f) {
+  exec(s, f, 'FacebookConnectPlugin', 'logAddedPaymentInfo', [name)
+}
+
 exports.getAccessToken = function getAccessToken (s, f) {
   exec(s, f, 'FacebookConnectPlugin', 'getAccessToken', [])
 }
@@ -60,5 +68,5 @@ exports.activateApp = function (s, f) {
 }
 
 exports.getDeferredApplink = function (s, f) {
-	  exec(s, f, 'FacebookConnectPlugin', 'getDeferredApplink', [])
+    exec(s, f, 'FacebookConnectPlugin', 'getDeferredApplink', [])
 }

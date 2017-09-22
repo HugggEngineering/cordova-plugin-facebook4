@@ -321,7 +321,33 @@ public class ConnectPlugin extends CordovaPlugin {
             logger.logPurchase(value, Currency.getInstance(currency));
             callbackContext.success();
             return true;
+        } else if (action.equals("logCompletedRegistrationEvent")) {
+            
+            if (args.length() != 1) {
+                callbackContext.error("Invalid arguments");
+                return true;
+            }
+            String registrationMethod = args.getString(0);
+            Bundle params = new Bundle();
+            params.putString(AppEventsConstants.EVENT_PARAM_REGISTRATION_METHOD, registrationMethod);
+            logger.logEvent(AppEventsConstants.EVENT_NAME_COMPLETED_REGISTRATION, params);
+            callbackContext.success();
+            return true;
+         } else if (action.equals("logAddedPaymentInfo")) {
 
+            if (args.length() != 1) {
+                callbackContext.error("Invalid arguments");
+                return true;
+            }
+            Bundle params   = new Bundle();
+            Integer success = new Integer(args.getString(0));
+
+            params.putInt(AppEventsConstants.EVENT_PARAM_SUCCESS, success ? 1 : 0);
+            logger.logEvent(AppEventsConstants.EVENT_NAME_ADDED_PAYMENT_INFO, params);  
+
+            callbackContext.success();
+            return true;
+               
         } else if (action.equals("showDialog")) {
             executeDialog(args, callbackContext);
             return true;
