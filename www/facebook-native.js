@@ -34,11 +34,11 @@ exports.logPurchase = function logPurchase (value, currency, s, f) {
 }
 
 exports.logCompletedRegistrationEvent = function logPurchase (name, s, f) {
-  exec(s, f, 'FacebookConnectPlugin', 'logCompletedRegistrationEvent', [name)
+  exec(s, f, 'FacebookConnectPlugin', 'logCompletedRegistrationEvent', [name])
 }
 
 exports.logAddedPaymentInfo = function logPurchase (name, s, f) {
-  exec(s, f, 'FacebookConnectPlugin', 'logAddedPaymentInfo', [name)
+  exec(s, f, 'FacebookConnectPlugin', 'logAddedPaymentInfo', [name])
 }
 
 exports.getAccessToken = function getAccessToken (s, f) {
