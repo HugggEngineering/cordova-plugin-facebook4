@@ -18,6 +18,7 @@ import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.FacebookAuthorizationException;
 import com.facebook.appevents.AppEventsLogger;
+import com.facebook.appevents.AppEventsConstants;
 import com.facebook.applinks.AppLinkData;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
@@ -342,7 +343,7 @@ public class ConnectPlugin extends CordovaPlugin {
             Bundle params   = new Bundle();
             Integer success = new Integer(args.getString(0));
 
-            params.putInt(AppEventsConstants.EVENT_PARAM_SUCCESS, success ? 1 : 0);
+            params.putInt(AppEventsConstants.EVENT_PARAM_SUCCESS, success);
             logger.logEvent(AppEventsConstants.EVENT_NAME_ADDED_PAYMENT_INFO, params);  
 
             callbackContext.success();
