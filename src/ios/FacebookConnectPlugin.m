@@ -135,7 +135,7 @@
 
 - (void)logAddedPaymentInfo:(CDVInvokedUrlCommand *)command {
     NSDictionary *params =
-    @{FBSDKAppEventParameterNameSuccess : @([command.arguments objectAtIndex:0])};;
+    @{FBSDKAppEventParameterNameSuccess : [command.arguments objectAtIndex:0]};;
     [FBSDKAppEvents
      logEvent:FBSDKAppEventNameAddedPaymentInfo
      parameters:params];
