@@ -281,7 +281,6 @@ public class ConnectPlugin extends CordovaPlugin {
         if (action.equals("login")) {
             executeLogin(args, callbackContext);
             return true;
-
         } else if (action.equals("logout")) {
             if (hasAccessToken()) {
                 LoginManager.getInstance().logOut();
@@ -323,7 +322,7 @@ public class ConnectPlugin extends CordovaPlugin {
             callbackContext.success();
             return true;
         } else if (action.equals("logCompletedRegistrationEvent")) {
-            
+
             if (args.length() != 1) {
                 callbackContext.error("Invalid arguments");
                 return true;
@@ -332,6 +331,45 @@ public class ConnectPlugin extends CordovaPlugin {
             Bundle params = new Bundle();
             params.putString(AppEventsConstants.EVENT_PARAM_REGISTRATION_METHOD, registrationMethod);
             logger.logEvent(AppEventsConstants.EVENT_NAME_COMPLETED_REGISTRATION, params);
+            callbackContext.success();
+            return true;
+        } else if (action.equals("logCompletedTutorial")) {
+            logger.logEvent(AppEventsConstants.EVENT_NAME_COMPLETED_TUTORIAL);
+            callbackContext.success();
+            return true;
+        } else if (action.equals("logInitiatedCheckout")) {
+            if (args.length() != 2) {
+                callbackContext.error("Invalid arguments");
+                return true;
+            }
+            JSONObject parameters;
+            String contentData;
+            String contentId;
+            String contentType;
+            String currency;
+            int numItems;
+            int paymentInfoAvailable;
+
+            double checkoutValue = args.getDouble(0);
+            try {
+                parameters = args.getJSONObject(1);
+                contentId = parameters.getString("content_id");
+                contentType = parameters.getString("content_type");
+                currency = parameters.getString("currency");
+                numItems = parameters.getInt("num_items");
+                paymentInfoAvailable = parameters.getInt("payment_info_available");
+            } catch (JSONException e) {
+                parameters = new JSONObject();
+                Log.e(TAG, "Missing or invalid parameters for logInitiatedCheckout");
+            }
+
+            Bundle params = new Bundle();
+            params.putString(AppEventsConstants.EVENT_PARAM_CONTENT_ID, contentId);
+            params.putString(AppEventsConstants.EVENT_PARAM_CONTENT_TYPE, contentType);
+            params.putInt(AppEventsConstants.EVENT_PARAM_NUM_ITEMS, numItems);
+            params.putInt(AppEventsConstants.EVENT_PARAM_PAYMENT_INFO_AVAILABLE, paymentInfoAvailable);
+            params.putString(AppEventsConstants.EVENT_PARAM_CURRENCY, currency);
+            logger.logEvent(AppEventsConstants.EVENT_NAME_INITIATED_CHECKOUT, checkoutValue, params);
             callbackContext.success();
             return true;
          } else if (action.equals("logAddedPaymentInfo")) {
@@ -344,11 +382,11 @@ public class ConnectPlugin extends CordovaPlugin {
             Integer success = new Integer(args.getString(0));
 
             params.putInt(AppEventsConstants.EVENT_PARAM_SUCCESS, success);
-            logger.logEvent(AppEventsConstants.EVENT_NAME_ADDED_PAYMENT_INFO, params);  
+            logger.logEvent(AppEventsConstants.EVENT_NAME_ADDED_PAYMENT_INFO, params);
 
             callbackContext.success();
             return true;
-               
+
         } else if (action.equals("showDialog")) {
             executeDialog(args, callbackContext);
             return true;

@@ -149,6 +149,45 @@
      parameters:params];
 }
 
+- (void)logCompletedTutorial:(CDVInvokedUrlCommand *)command {
+    CDVPluginResult *res;
+    [FBSDKAppEvents
+     logEvent:FBSDKAppEventNameCompletedTutorial];
+    res = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+    [self.commandDelegate sendPluginResult:res callbackId:command.callbackId];
+}
+
+- (void)logInitiatedCheckout:(CDVInvokedUrlCommand *)command {
+    CDVPluginResult *res;
+    if ([command.arguments count] != 2) {
+        res = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"Invalid arguments"];
+        [self.commandDelegate sendPluginResult:res callbackId:command.callbackId];
+        return;
+    }
+    double total = [[command.arguments objectAtIndex:0] doubleValue];
+    NSDictionary *options = [command.arguments objectAtIndex:1];
+
+    NSString *contentId = options[@"content_id"];
+    NSString *contentType = options[@"content_type"];
+    NSString *currency = options[@"currency"];
+    NSInteger numItems = [options[@"num_items"] integerValue];
+    NSInteger paymentInfoAvailable = [options[@"payment_info_available"] integerValue];
+    NSDictionary *params =
+    @{
+      FBSDKAppEventParameterNameContentID : contentId ? contentId : @"",
+      FBSDKAppEventParameterNameContentType : contentType ? contentType : @"",
+      FBSDKAppEventParameterNameNumItems : @(numItems),
+      FBSDKAppEventParameterNamePaymentInfoAvailable : @(paymentInfoAvailable),
+      FBSDKAppEventParameterNameCurrency : currency ? currency : @""
+      };
+    [FBSDKAppEvents
+     logEvent:FBSDKAppEventNameInitiatedCheckout
+     valueToSum:total
+     parameters:params];
+    res = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+    [self.commandDelegate sendPluginResult:res callbackId:command.callbackId];
+}
+
 - (void)login:(CDVInvokedUrlCommand *)command {
     NSLog(@"Starting login");
     CDVPluginResult *pluginResult;
@@ -224,8 +263,8 @@
     if ([command.arguments count] > 0) {
         permissions = command.arguments;
     }
-    
-    NSSet *grantedPermissions = [FBSDKAccessToken currentAccessToken].permissions; 
+
+    NSSet *grantedPermissions = [FBSDKAccessToken currentAccessToken].permissions;
 
     for (NSString *value in permissions) {
         NSLog(@"Checking permission %@.", value);
@@ -236,7 +275,7 @@
             return;
         }
     }
-    
+
     CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
                                                      messageAsString:@"All permissions have been accepted"];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
@@ -858,10 +897,10 @@ void FBMethodSwizzle(Class c, SEL originalSelector) {
     }
     // Required by FBSDKCoreKit for deep linking/to complete login
     [[FBSDKApplicationDelegate sharedInstance] application:application openURL:url sourceApplication:[options valueForKey:@"UIApplicationOpenURLOptionsSourceApplicationKey"] annotation:0x0];
-    
+
     // Call existing method
     [self swizzled_application:application openURL:url sourceApplication:[options valueForKey:@"UIApplicationOpenURLOptionsSourceApplicationKey"] annotation:0x0];
-    
+
     // NOTE: Cordova will run a JavaScript method here named handleOpenURL. This functionality is deprecated
     // but will cause you to see JavaScript errors if you do not have window.handleOpenURL defined:
     // https://github.com/Wizcorp/phonegap-facebook-plugin/issues/703#issuecomment-63748816

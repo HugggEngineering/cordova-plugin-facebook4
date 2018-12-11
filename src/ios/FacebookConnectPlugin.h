@@ -20,6 +20,8 @@
 - (void)getAccessToken:(CDVInvokedUrlCommand *)command;
 - (void)logEvent:(CDVInvokedUrlCommand *)command;
 - (void)logPurchase:(CDVInvokedUrlCommand *)command;
+- (void)logCompletedTutorial:(CDVInvokedUrlCommand *)command;
+- (void)logInitiatedCheckout:(CDVInvokedUrlCommand *)command;
 - (void)logCompletedRegistrationEvent:(CDVInvokedUrlCommand *)command;
 - (void)logAddedPaymentInfo:(CDVInvokedUrlCommand *)command;
 - (void)login:(CDVInvokedUrlCommand *)command;
