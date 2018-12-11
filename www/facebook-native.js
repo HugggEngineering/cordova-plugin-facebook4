@@ -33,6 +33,25 @@ exports.logPurchase = function logPurchase (value, currency, s, f) {
   exec(s, f, 'FacebookConnectPlugin', 'logPurchase', [value, currency])
 }
 
+exports.logCompletedTutorial = function logCompletedTutorial (s, f) {
+  exec(s, f, 'FacebookConnectPlugin', 'logCompletedTutorial')
+}
+
+/**
+ * details is a map of
+ * {
+ *   content_id: string,
+ *   content_type: string,
+ *   num_items: int,
+ *   payment_info_available: 1 or 0,
+ *   currency: string,
+ * }
+ */
+exports.logInitiatedCheckout = function logInitiatedCheckout (value, details, s, f) {
+  details = details || {};
+  exec(s, f, 'FacebookConnectPlugin', 'logInitiatedCheckout', [value, details])
+}
+
 exports.logCompletedRegistrationEvent = function logPurchase (name, s, f) {
   exec(s, f, 'FacebookConnectPlugin', 'logCompletedRegistrationEvent', [name])
 }
