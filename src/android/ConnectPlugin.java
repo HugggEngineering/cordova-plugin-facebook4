@@ -343,12 +343,12 @@ public class ConnectPlugin extends CordovaPlugin {
                 return true;
             }
             JSONObject parameters;
-            String contentData;
-            String contentId;
-            String contentType;
-            String currency;
-            int numItems;
-            int paymentInfoAvailable;
+            String contentData = "";
+            String contentId = "";
+            String contentType = "";
+            String currency = "";
+            int numItems = 1;
+            int paymentInfoAvailable = 0;
 
             double checkoutValue = args.getDouble(0);
             try {
